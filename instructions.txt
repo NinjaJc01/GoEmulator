@@ -1,0 +1,17 @@
+Code		Number	Description																					Syntax
+HLT			0		Exit																						HLT
+DAT			0		Used to mark out data																		DAT <data>
+ADD			1		Add the data in the memory location to the accumulator										ADD <loc>
+SUB			2		Subtract the data in the memlocation from the acc											SUB <loc>
+STO/STR		3		Stor acc in memloc																			STO <loc>
+BRZ			4		Jump if acc is zero to mem																	JMZ <loc>
+BRP			5		Jump if acc is positive to mem																JPL <loc>
+BRA			6		Jump no matter what to mem																	JMP <loc>
+LDA			7		Load the acc with the value 																LDA <loc>
+OUT			8		Output the acc value, as a char or a number													OUT <0 for number, 1 for character>
+INP			9		Input, 0 for number, 1 for char. One at a time, anything beyond 1 is ignored				INP <0 or 1>
+ASR 		10		Arithmatic Shift Right by 1 bit (On the acc)												ASR 0
+ASL 		11		Arithmatic Shift Left by 1 bit (On the acc) (x2)											ASL 0
+MUL			12		Multiply by loc																				MUL <loc>
+CMP			13		CoMPare acc to operand, 1 if acc greater, 0 if equal, -1 if acc lower, set acc =result		CMP <loc>
+SET			14		Set acc to operand																			SET <val>
