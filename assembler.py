@@ -47,11 +47,11 @@ for line in PROGRAM:
         delabelled += line+"\n"
     address_counter += 1  # Used for symbol table
 a = "".join(PROGRAM)
-print(symbol_table)
+print("Symbol Table:",symbol_table)
 to_assemble = ""
 for line in delabelled.split("\n"):
     for key, value in symbol_table.items():
         line = re.sub(r"\b"+key+r"\b", str(value), line)
-    print(line)
-    to_assemble += line+"\n"
-print("Final:\n", to_assemble, sep="")
+    print(repr(line))
+    if line != '': to_assemble += line+"\n"
+print("Final:\n", to_assemble, sep="", end='')
