@@ -26,6 +26,8 @@ INSTRUCTIONS = {
 
 
 def _twos_complement(number):
+    if number == "": 
+        number = 0
     number = int(number)
     if number < 0:
         number *= -1

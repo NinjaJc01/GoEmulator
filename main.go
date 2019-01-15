@@ -125,21 +125,6 @@ func main() {
 		}
 	}
 	dumpMem(false)
-	// //Arbitrary code goes here
-	// set(196621) //STA 13
-	// //fmt.Print("Splitty: ")
-	// //fmt.Println(split(196621))
-	// sta(0)
-	// set(196623) //STA 15
-	// sta(1)
-	// set(-5)
-	// sta(12)
-	// //hlt(0)
-	// bra(3)
-	// //dumpMem(false)
-	// set(-7)
-	// bra(0)
-	// //fmt.Println(decode(0))
 	fmt.Println("-----------------------------------")
 	//fmt.Println("started",programcounter)
 	for programcounter >= 0 {
@@ -151,6 +136,9 @@ func main() {
 		execute(operator, operand)
 	}
 	fmt.Println("ended", programcounter)
+	if debug {
+		dumpMem(false)
+	}
 	//dumpMem(false)
 	//fmt.Println(memory)
 }
