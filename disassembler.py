@@ -29,7 +29,7 @@ def twos_comp(val, bits):
 
 for line in PROGRAM:
     PROGRAM_EDITED.append(line.rstrip())
-print(PROGRAM_EDITED)
+##print(PROGRAM_EDITED)
 
 for line in PROGRAM_EDITED:
     operator = twos_comp(int(line[:16], 2), 16)
