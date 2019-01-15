@@ -9,6 +9,7 @@ Important notes:
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 )
@@ -39,7 +40,7 @@ var (
 		13: cmp,
 		14: set,
 	}
-	program [memAmount]string
+	program []string
 )
 
 //Higher level logic
@@ -49,6 +50,24 @@ func input(message string) string { //Python Style input function, abstracts awa
 	scanner.Scan()
 	line := scanner.Text()
 	return line
+}
+func readProgram() {
+	file, err := os.Open("program.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		program = append(program, scanner.Text())
+		//fmt.Println(scanner.Text())
+	}
+	program = append(program, "")
+	fmt.Println(program)
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func dumpMem(binary bool) {
@@ -73,8 +92,8 @@ func split(x int32) (int16, int16) { //splits into operand and operator, -32768 
 	return int16(highBits), lowBits
 }
 func twosComplement(binary string) int16 {
-	total := -32768*int(binary[0])
-	toAdd, _ := strconv.ParseInt(binary[1:len(binary)],2,16)
+	total := -32768 * int(binary[0])
+	toAdd, _ := strconv.ParseInt(binary[1:len(binary)], 2, 16)
 	total += int(toAdd)
 	return int16(total)
 }
@@ -88,18 +107,19 @@ func power2(y int32) (a int32) {
 
 func main() {
 	fmt.Printf("------ Prepared %06v bytes ------\n", memAmount*4)
-	program[0] = "00000000000010010000000000000000"
-	program[1] = "00000000000010000000000000000000"
-	program[2] = "00000000000001000000000000000110"
-	program[3] = "00000000000000100000000000000111"
-	program[4] = "00000000000010000000000000000000"
-	program[5] = "00000000000001100000000000000010"
-	program[6] = "00000000000000000000000000000000"
-	program[7] = "00000000000000000000000000000001"
+	readProgram() //Read in the program from program.txt
+	// program[0] = "00000000000010010000000000000000"
+	// program[1] = "00000000000010000000000000000000"
+	// program[2] = "00000000000001000000000000000110"
+	// program[3] = "00000000000000100000000000000111"
+	// program[4] = "00000000000010000000000000000000"
+	// program[5] = "00000000000001100000000000000010"
+	// program[6] = "00000000000000000000000000000000"
+	// program[7] = "00000000000000000000000000000001"
 
-	for index,value := range(program){
+	for index, value := range program {
 		if value != "" {
-			memory[index] = (int32(twosComplement(value[0:16]))*65536)+(int32(twosComplement(value[16:32])))
+			memory[index] = (int32(twosComplement(value[0:16])) * 65536) + (int32(twosComplement(value[16:32])))
 		} else {
 			break
 		}

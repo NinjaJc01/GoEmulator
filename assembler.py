@@ -46,7 +46,7 @@ def _twos_complement(number):
 
 
 SYMBOL_TABLE = {}
-PROGRAM_FILE = open("sample program.txt","r")
+PROGRAM_FILE = open("src.txt","r")
 PROGRAM = PROGRAM_FILE.readlines()
 PROGRAM_FILE.close()
 ADDRESS_COUNTER = 0
@@ -99,6 +99,6 @@ for line in TO_ASSEMBLE.split("\n"):
     operator = INSTRUCTIONS[operator.lower()]
     print(operator, operand)
     OUT_PROGRAM += (_twos_complement(operator)+_twos_complement(operand)+"\n")
-OUT_FILE = open("machine code.txt","w")
+OUT_FILE = open("program.txt","w")
 print(OUT_PROGRAM, file=OUT_FILE, end="")
 OUT_FILE.close()
