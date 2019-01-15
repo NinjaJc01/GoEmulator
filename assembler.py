@@ -56,6 +56,7 @@ DELABELLED = ""
 for line in PROGRAM:
     # Split at spaces
     line = line.rstrip()
+    line = line.lstrip()
     line = line.split(" ")
     # Check if first symbol is an instruction
     if line[0].lower() in INSTRUCTIONS:
