@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	memAmount = 128   //Memory amount, in 32bit words
+	memAmount = 24   //Memory amount, in 32bit words
 	debug     = false //Print every instruction as it's executed or not
 )
 
@@ -39,6 +39,23 @@ var (
 		12: mul,
 		13: cmp,
 		14: set,
+	}
+	instructionStrings   = map[int32]string{
+		0:  "hlt",
+		1:  "add",
+		2:  "sub",
+		3:  "sta",
+		4:  "brz",
+		5:  "brp",
+		6:  "bra",
+		7:  "lda",
+		8:  "out",
+		9:  "inp",
+		10: "asr",
+		11: "asl",
+		12: "mul",
+		13: "cmp",
+		14: "set",
 	}
 	program []string
 )
@@ -64,7 +81,7 @@ func readProgram() {
 		//fmt.Println(scanner.Text())
 	}
 	program = append(program, "")
-	fmt.Println(program)
+	//fmt.Println(program)
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
@@ -73,14 +90,15 @@ func readProgram() {
 func dumpMem(binary bool) {
 	for loc := 0; loc < len(memory); loc++ {
 		if binary {
-			fmt.Printf("%#04x %032b ", loc, uint32(memory[loc]))
+			fmt.Printf(" %#04x %032b ", loc, uint32(memory[loc]))
 		} else {
-			fmt.Printf("%#04v % 16v ", loc, memory[loc])
+			fmt.Printf(" %#06v % 32v ", loc, memory[loc])
 		}
-		if loc%4 == 3 { //print 4 locs per row
+		if loc%2 == 1 { //print 2 locs per row
 			fmt.Println()
 		}
 	}
+	fmt.Println()
 }
 
 //Lower level logic
@@ -106,27 +124,19 @@ func power2(y int32) (a int32) {
 }
 
 func main() {
-	fmt.Printf("------ Prepared %06v bytes ------\n", memAmount*4)
-	readProgram() //Read in the program from program.txt
-	// program[0] = "00000000000010010000000000000000"
-	// program[1] = "00000000000010000000000000000000"
-	// program[2] = "00000000000001000000000000000110"
-	// program[3] = "00000000000000100000000000000111"
-	// program[4] = "00000000000010000000000000000000"
-	// program[5] = "00000000000001100000000000000010"
-	// program[6] = "00000000000000000000000000000000"
-	// program[7] = "00000000000000000000000000000001"
-
+	fmt.Printf("----------------------------- Prepared %06v bytes ------------------------------\n", memAmount*4)
+	readProgram() //Read in the program from program.txt, into slice of strings
+	//Load program into memory
 	for index, value := range program {
-		if value != "" {
+		if value != "" { //Should be \n terminated, therefore last line will be ""
 			memory[index] = (int32(twosComplement(value[0:16])) * 65536) + (int32(twosComplement(value[16:32])))
 		} else {
 			break
 		}
 	}
+
 	dumpMem(false)
-	fmt.Println("-----------------------------------")
-	//fmt.Println("started",programcounter)
+	fmt.Println("----------------------------------------------------------------------------------")
 	for programcounter >= 0 {
 		data := fetch()
 		if debug {
@@ -135,10 +145,7 @@ func main() {
 		operator, operand := decode(data)
 		execute(operator, operand)
 	}
-	fmt.Println("ended", programcounter)
-	if debug {
-		dumpMem(false)
-	}
+	fmt.Println("----------------------------------------------------------------------------------")
 	//dumpMem(false)
 	//fmt.Println(memory)
 }
@@ -164,6 +171,13 @@ func decode(data int32) (func(int32), int32) {
 	//fmt.Println(opIndex, " : ", operand)
 	return operator, int32(operand)
 }
+func decodeString(data int32) (string) {
+	opIndex, operand := split(data)
+	operator := instructionStrings[int32(opIndex)]
+	//fmt.Println(opIndex, " : ", operand)
+	return fmt.Sprintln(operator, int32(operand))
+}
+
 
 func execute(operator func(int32), operand int32) {
 	operator(operand)
@@ -274,7 +288,7 @@ func mul(operand int32) { //12
 	if debug {
 		fmt.Println("MUL", operand)
 	}
-	acc *= operand
+	acc *= memory[operand]
 }
 
 func cmp(compareTo int32) { //13

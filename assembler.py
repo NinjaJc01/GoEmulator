@@ -58,6 +58,7 @@ for line in PROGRAM:
     line = line.rstrip()
     line = line.lstrip()
     line = line.split(" ")
+    print(len(line),line)
     # Check if first symbol is an instruction
     if line[0].lower() in INSTRUCTIONS:
         DELABELLED += " ".join(line)+"\n"
