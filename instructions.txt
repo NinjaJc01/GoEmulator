@@ -13,5 +13,5 @@ INP			9		Input, 0 for number, 1 for char. One at a time, anything beyond 1 is ig
 ASR 		10		Arithmatic Shift Right by 1 bit (On the acc)												ASR 0
 ASL 		11		Arithmatic Shift Left by 1 bit (On the acc) (x2)											ASL 0
 MUL			12		Multiply by loc																				MUL <loc>
-CMP			13		CoMPare acc to operand, 1 if acc greater, 0 if equal, -1 if acc lower, set acc =result		CMP <loc>
+CMP			13		CoMPare acc to location, 1 if acc greater, 0 if equal, -1 if acc lower, set acc =result		CMP <loc>
 SET			14		Set acc to operand																			SET <val>

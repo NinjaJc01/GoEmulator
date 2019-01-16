@@ -292,6 +292,7 @@ func mul(operand int32) { //12
 }
 
 func cmp(compareTo int32) { //13
+	compareTo = memory[compareTo]
 	if debug {
 		fmt.Println("CMP", compareTo)
 	}
