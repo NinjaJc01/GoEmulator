@@ -16,6 +16,7 @@ INSTRUCTIONS = {
     "jmp": 6,
     "lda": 7,
     "out": 8,
+    "otc": 8,
     "inp": 9,
     "asr": 10,
     "asl": 11,
@@ -57,6 +58,7 @@ for line in PROGRAM:
     # Split at spaces
     line = line.rstrip()
     line = line.lstrip()
+    line = re.sub(" +", " ",line) ##Remove duplicate spaces
     line = line.split(" ")
     print(len(line),line)
     # Check if first symbol is an instruction
@@ -98,6 +100,8 @@ for line in TO_ASSEMBLE.split("\n"):
         if len(line) > 2:
             operator = line
             operand = 0
+            if operator.lower() == "otc":
+               operand = 1 
         else:
             break
     operator = INSTRUCTIONS[operator.lower()]

@@ -16,7 +16,7 @@ import (
 
 const (
 	memAmount = 24   //Memory amount, in 32bit words
-	debug     = false //Print every instruction as it's executed or not
+	debug     = true //Print every instruction as it's executed or not
 )
 
 var (
@@ -139,14 +139,14 @@ func main() {
 	fmt.Println("----------------------------------------------------------------------------------")
 	for programcounter >= 0 {
 		data := fetch()
-		if debug {
-			fmt.Println("data:", data, "pc: ", programcounter, "acc: ", acc)
-		}
+		// if debug { //Irritating
+		// 	fmt.Println("data:", data, "pc: ", programcounter, "acc: ", acc)
+		// }
 		operator, operand := decode(data)
 		execute(operator, operand)
 	}
 	fmt.Println("----------------------------------------------------------------------------------")
-	//dumpMem(false)
+	dumpMem(false)
 	//fmt.Println(memory)
 }
 
@@ -247,7 +247,7 @@ func out(outType int32) { //8
 		fmt.Println("OUT", outType)
 	}
 	if outType == 0 { //Print as number
-		fmt.Println(acc)
+		fmt.Print(acc)
 	} else {
 		fmt.Print(string(acc)) //Print as character
 	}
