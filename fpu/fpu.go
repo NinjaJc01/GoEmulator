@@ -20,9 +20,6 @@ func intToTwos(an int, bitcount int) string {
 		toAdd, _ := strconv.ParseInt(representation, 2, 64)
 		toAdd++
 		representation = strconv.FormatInt(toAdd, 2)
-		if len(representation) != bitcount {
-			fmt.Println("Oh fuck")
-		}
 		fmt.Println("repr:",representation, "Bitcount:", bitcount, "Len: ", len(representation))
 		return representation
 	}
