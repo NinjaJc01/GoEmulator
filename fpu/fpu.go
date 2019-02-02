@@ -20,20 +20,15 @@ func intToTwos(an int, bitcount int) string {
 		toAdd, _ := strconv.ParseInt(representation, 2, 64)
 		toAdd++
 		representation = strconv.FormatInt(toAdd, 2)
-		fmt.Println("repr:",representation, "Bitcount:", bitcount, "Len: ", len(representation))
 		return representation
 	}
 	return fmt.Sprintf("%0"+fmt.Sprintf("%v", bitcount)+"v", strconv.FormatInt(int64(an), 2))
 }
 
 func twosComplementNew(binary string) int {
-	//fmt.Println(binary)
 	if binary[0] == '1' {
-		//fmt.Println("Negative")
 		val, _ := strconv.ParseInt(binary, 2, 64)
-		fmt.Println(power2int(len(binary)))
 		val -= power2int(len(binary))
-		//fmt.Println("Value: ",val)
 		return int(val)
 	}
 	val, _ := strconv.ParseInt(binary, 2, 64)
@@ -98,25 +93,21 @@ func rPadZero(s string, size int) string { //recursively rightpad with zeroes
 func FloatingPointMultiply(acc int32, multiplier int32) int32{
 	a := fpToBaseTen(splitFP(intToTwos(int(acc),32))) * fpToBaseTen(splitFP(intToTwos(int(multiplier),32)))
 	return int32(twosComplementNew(normalise(splitFP(bTenToFP(a)))))
-	//fmt.Println("Result:",a)
 }
 //FloatingPointDivide is a function for dividing two int32s as floats and giving an answer as a converted int32
 func FloatingPointDivide(acc int32, divisor int32) int32{
 	a := fpToBaseTen(splitFP(intToTwos(int(acc),32))) / fpToBaseTen(splitFP(intToTwos(int(divisor),32)))
 	return int32(twosComplementNew(normalise(splitFP(bTenToFP(a)))))
-	//fmt.Println("Result:",a)
 }
 //FloatingPointAdd is a function for multiplying two int32s as floats and giving an answer as a converted int32
 func FloatingPointAdd(acc int32, plus int32) int32{
 	a := fpToBaseTen(splitFP(intToTwos(int(acc),32))) + fpToBaseTen(splitFP(intToTwos(int(plus),32)))
 	return int32(twosComplementNew(normalise(splitFP(bTenToFP(a)))))
-	//fmt.Println("Result:",a)
 }
 //FloatingPointSub is a function for dividing two int32s as floats and giving an answer as a converted int32
 func FloatingPointSub(acc int32, subtractor int32) int32{
 	a := fpToBaseTen(splitFP(intToTwos(int(acc),32))) - fpToBaseTen(splitFP(intToTwos(int(subtractor),32)))
 	return int32(twosComplementNew(normalise(splitFP(bTenToFP(a)))))
-	//fmt.Println("Result:",a)
 }
 //FormatFP is a wrapper for fpToBaseTen and splitFP to convert an int32 into a float for printing
 func FormatFP(number int32) string {

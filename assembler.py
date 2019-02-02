@@ -22,7 +22,13 @@ INSTRUCTIONS = {
     "asl": 11,
     "mul": 12,
     "cmp": 13,
-    "set": 14
+    "set": 14,
+    "fad": 256,
+    "fsu": 257,
+    "fmu": 258,
+    "fdv": 259,
+    "fsq": 260,
+    "fcv": 261
 }
 
 

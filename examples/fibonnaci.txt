@@ -5,7 +5,9 @@ LOOP    LDA A
         BRP ENDLOOP
         LDA A
         OUT 0
-        SET 32 
+        SET 44
+        OUT 1
+        SET 32
         OUT 1
         LDA B
         ADD A
