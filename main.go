@@ -12,11 +12,13 @@ import (
 	"log"
 	"os"
 	"strconv"
+
+	"./fpu"
 )
 
 const (
-	memAmount = 24   //Memory amount, in 32bit words
-	debug     = true //Print every instruction as it's executed or not
+	memAmount = 24    //Memory amount, in 32bit words
+	debug     = false //Print every instruction as it's executed or not
 )
 
 var (
@@ -39,23 +41,35 @@ var (
 		12: mul,
 		13: cmp,
 		14: set,
+		256: fad,
+		257: fsu,
+		258: fmu,
+		259: fdv,
+		260: fsq,
+		261: fcv,
 	}
-	instructionStrings   = map[int32]string{
-		0:  "hlt",
-		1:  "add",
-		2:  "sub",
-		3:  "sta",
-		4:  "brz",
-		5:  "brp",
-		6:  "bra",
-		7:  "lda",
-		8:  "out",
-		9:  "inp",
-		10: "asr",
-		11: "asl",
-		12: "mul",
-		13: "cmp",
-		14: "set",
+	instructionStrings = map[int32]string{
+		0:   "hlt",
+		1:   "add",
+		2:   "sub",
+		3:   "sta",
+		4:   "brz",
+		5:   "brp",
+		6:   "bra",
+		7:   "lda",
+		8:   "out",
+		9:   "inp",
+		10:  "asr",
+		11:  "asl",
+		12:  "mul",
+		13:  "cmp",
+		14:  "set",
+		256: "fad",
+		257: "fsu",
+		258: "fmu",
+		259: "fdv",
+		260: "fsq",
+		261: "fcv",
 	}
 	program []string
 )
@@ -109,6 +123,34 @@ func split(x int32) (int16, int16) { //splits into operand and operator, -32768 
 	//fmt.Printf("%016b %016b\n", highBits, lowBits)
 	return int16(highBits), lowBits
 }
+func int32ToString(number int32) string {
+	representation := ""
+	if number < 0 {
+		number *= -1
+		temp := fmt.Sprintf("%032v", strconv.FormatInt(int64(number), 2))
+		for _, bit := range temp { //Flip bits
+			if bit == '0' {
+				representation += "1"
+			} else {
+				representation += "0"
+			}
+		}
+		//Add one
+		toAdd, _ := strconv.ParseInt(representation, 2, 64)
+		toAdd++
+		representation = strconv.FormatInt(toAdd, 2)
+		return representation
+	}
+	return fmt.Sprintf("%032v", strconv.FormatInt(int64(number), 2))
+}
+
+// func int32toFloat(number int32) float64 {
+// 	floatingP := int32ToString(number)
+// 	//I actually need to check the sign on these, and use 2's complement to convert them!
+// 	//quick 2s complement conversion: number-(2^bitcount)
+// 	mantissaAcc := strconv.ParseInt(floatingP[0:24],2,24)
+// 	exponentAcc := strconv.ParseInt(floatingP[24:32],2,8)
+// }
 func twosComplement(binary string) int16 {
 	total := -32768 * int(binary[0])
 	toAdd, _ := strconv.ParseInt(binary[1:len(binary)], 2, 16)
@@ -145,6 +187,8 @@ func main() {
 		operator, operand := decode(data)
 		execute(operator, operand)
 	}
+	fmt.Println(int32ToString(-5))
+	fmt.Println(int32ToString(5))
 	fmt.Println("----------------------------------------------------------------------------------")
 	dumpMem(false)
 	//fmt.Println(memory)
@@ -171,13 +215,12 @@ func decode(data int32) (func(int32), int32) {
 	//fmt.Println(opIndex, " : ", operand)
 	return operator, int32(operand)
 }
-func decodeString(data int32) (string) {
+func decodeString(data int32) string {
 	opIndex, operand := split(data)
 	operator := instructionStrings[int32(opIndex)]
 	//fmt.Println(opIndex, " : ", operand)
 	return fmt.Sprintln(operator, int32(operand))
 }
-
 
 func execute(operator func(int32), operand int32) {
 	operator(operand)
@@ -185,7 +228,7 @@ func execute(operator func(int32), operand int32) {
 
 //Instructions
 func hlt(_ int32) {
-	fmt.Println("Exit!")
+	fmt.Println("\nExit!")
 	programcounter = -1
 }
 
@@ -246,10 +289,13 @@ func out(outType int32) { //8
 	if debug {
 		fmt.Println("OUT", outType)
 	}
-	if outType == 0 { //Print as number
+	switch outType {
+	case 0:
 		fmt.Print(acc)
-	} else {
-		fmt.Print(string(acc)) //Print as character
+	case 1:
+		fmt.Print(string(acc))
+	case 2:
+		fmt.Print(fpu.FormatFP(acc))
 	}
 }
 
@@ -331,4 +377,28 @@ func xor(index int32) {
 		fmt.Println("XOR", index)
 	}
 	acc = acc ^ memory[index]
+}
+
+func fad(location int32) {
+	acc = fpu.FloatingPointAdd(acc, memory[location])
+}
+
+func fsu(location int32) {
+	acc = fpu.FloatingPointSub(acc, memory[location])
+}
+
+func fmu(location int32) {
+	acc = fpu.FloatingPointMultiply(acc, memory[location])
+}
+
+func fdv(location int32) {
+	acc = fpu.FloatingPointDivide(acc, memory[location])
+}
+
+func fsq(_ int32) {
+	acc = fpu.FloatingPointMultiply(acc, acc)
+}
+
+func fcv(_ int32) {
+	acc = fpu.FloatingPointConvert(acc)
 }
