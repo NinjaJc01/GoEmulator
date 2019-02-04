@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	memAmount = 24    //Memory amount, in 32bit words
+	memAmount = 52   //Memory amount, in 32bit words
 	debug     = false //Print every instruction as it's executed or not
 )
 
@@ -47,6 +47,7 @@ var (
 		259: fdv,
 		260: fsq,
 		261: fcv,
+		262: fci,
 	}
 	// instructionStrings = map[int32]string{
 	// 	0:   "hlt",
@@ -106,7 +107,7 @@ func dumpMem(binary bool) {
 		} else {
 			fmt.Printf(" %#06v % 32v ", loc, memory[loc])
 		}
-		if loc%2 == 1 { //print 2 locs per row
+		if loc%4 == 3 { //print 2 locs per row
 			fmt.Println()
 		}
 	}
@@ -351,25 +352,49 @@ func xor(index int32) {
 }
 
 func fad(location int32) {
+	if debug {
+		fmt.Println("FAD", location)
+	}
 	acc = fpu.FloatingPointAdd(acc, memory[location])
 }
 
 func fsu(location int32) {
+	if debug {
+		fmt.Println("FSU", location)
+	}
 	acc = fpu.FloatingPointSub(acc, memory[location])
 }
 
 func fmu(location int32) {
+	if debug {
+		fmt.Println("FMU", location)
+	}
 	acc = fpu.FloatingPointMultiply(acc, memory[location])
 }
 
 func fdv(location int32) {
+	if debug {
+		fmt.Println("FDV", location)
+	}
 	acc = fpu.FloatingPointDivide(acc, memory[location])
 }
 
 func fsq(_ int32) {
+	if debug {
+		fmt.Println("FSQ")
+	}
 	acc = fpu.FloatingPointMultiply(acc, acc)
 }
 
 func fcv(_ int32) {
+	if debug {
+		fmt.Println("FCV")
+	}
 	acc = fpu.FloatingPointConvert(acc)
+}
+func fci(_ int32) {
+	if debug {
+		fmt.Println("FCI")
+	}
+	acc = fpu.FloatToInt(acc)
 }

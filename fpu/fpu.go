@@ -117,3 +117,7 @@ func FormatFP(number int32) string {
 func FloatingPointConvert(acc int32) int32{
 	return int32(twosComplementNew(bTenToFP(float64(acc))))
 }
+//TODO float to int using floor.
+func FloatToInt(acc int32) int32 {
+	return int32(math.Floor(fpToBaseTen(splitFP(intToTwos(int(acc), 32)))))
+}

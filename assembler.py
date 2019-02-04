@@ -28,7 +28,8 @@ INSTRUCTIONS = {
     "fmu": 258,
     "fdv": 259,
     "fsq": 260,
-    "fcv": 261
+    "fcv": 261,
+    "fci": 262
 }
 
 
