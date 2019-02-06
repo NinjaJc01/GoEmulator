@@ -16,7 +16,15 @@ INSTRUCTIONS = {
     11: "asl",
     12: "mul",
     13: "cmp",
-    14: "set"
+    14: "set",
+    256: "fad",
+	257: "fsu",
+	258: "fmu",
+	259: "fdv",
+	260: "fsq",
+    261: "fsr",
+	262: "fcv",
+	263: "fci"
 }
 
 

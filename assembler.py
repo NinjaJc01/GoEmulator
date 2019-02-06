@@ -28,8 +28,9 @@ INSTRUCTIONS = {
     "fmu": 258,
     "fdv": 259,
     "fsq": 260,
-    "fcv": 261,
-    "fci": 262
+    "fsr": 261,
+    "fcv": 262,
+    "fci": 263
 }
 
 
@@ -65,9 +66,9 @@ for line in PROGRAM:
     # Split at spaces
     line = line.rstrip()
     line = line.lstrip()
-    line = re.sub(" +", " ",line) ##Remove duplicate spaces
+    line = re.sub(" +", " ", line)  # Remove duplicate spaces
     line = line.split(" ")
-    print(len(line),line)
+    print(len(line), line)
     # Check if first symbol is an instruction
     if line[0].lower() in INSTRUCTIONS:
         DELABELLED += " ".join(line)+"\n"
@@ -108,7 +109,7 @@ for line in TO_ASSEMBLE.split("\n"):
             operator = line
             operand = 0
             if operator.lower() == "otc":
-               operand = 1 
+                operand = 1
         else:
             break
     operator = INSTRUCTIONS[operator.lower()]

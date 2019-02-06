@@ -18,11 +18,13 @@ MUL			12		Multiply by loc																				MUL <loc>
 CMP			13		CoMPare acc to location, 1 if acc greater, 0 if equal, -1 if acc lower, set acc =result		CMP <loc>
 SET			14		Set acc to operand																			SET <val>
 FPU Instructions (32bit, Signed 24bit mantissa, Signed 8 bit exponent but not IEEE754. Internally, these are processed as float64s)
+Float Notes: Mantissa of 0 with an exponent of non zero means special value. Exponent 01111111 is +ive inf, 11111111 is -ive inf, 10000000 is NaN
 FAD         256     Floating point ADd acc and loc                                                              FAD <loc>
 FSU         257     Floating point SUb loc from acc                                                             FSU <loc>
 FMU         258     Floating point MUltiply acc and loc                                                         FMU <loc>
 FDV         259     Floating point DiVide acc by loc                                                            FDV <loc>
 FSQ         260     Floating point square acc                                                                   FSQ <doesn't matter>
-FCV         261     Convert ACC from int to int repr of float                                                   FCV <doesn't matter>
-FCI         262     Convert ACC from float to int (floor)                                                       FCI <doesn't ma
+FSR         261
+FCV         262     Convert ACC from int to int repr of float                                                   FCV <doesn't matter>
+FCI         263     Convert ACC from float to int (floor)                                                       FCI <doesn't matter>
 

@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	memAmount = 52   //Memory amount, in 32bit words
+	memAmount = 64   //Memory amount, in 32bit words
 	debug     = false //Print every instruction as it's executed or not
 )
 
@@ -46,8 +46,8 @@ var (
 		258: fmu,
 		259: fdv,
 		260: fsq,
-		261: fcv,
-		262: fci,
+		262: fcv,
+		263: fci,
 	}
 	// instructionStrings = map[int32]string{
 	// 	0:   "hlt",
@@ -70,7 +70,8 @@ var (
 	// 	258: "fmu",
 	// 	259: "fdv",
 	// 	260: "fsq",
-	// 	261: "fcv",
+	// 	262: "fcv",
+	//	263: "fci",
 	// }
 	program []string
 )
@@ -155,7 +156,7 @@ func main() {
 	fmt.Println("----------------------------------------------------------------------------------")
 	for programcounter >= 0 {
 		data := fetch()
-		// if debug { //Irritating
+		// if debug { //Really, too irritating to leave in. Useful if something goes VERY wrong
 		// 	fmt.Println("data:", data, "pc: ", programcounter, "acc: ", acc)
 		// }
 		operator, operand := decode(data)
@@ -187,6 +188,7 @@ func decode(data int32) (func(int32), int32) {
 	//fmt.Println(opIndex, " : ", operand)
 	return operator, int32(operand)
 }
+//No longer needed as every instruction prints in debug mode anyway
 // func decodeString(data int32) string {
 // 	opIndex, operand := split(data)
 // 	operator := instructionStrings[int32(opIndex)]
@@ -268,6 +270,8 @@ func out(outType int32) { //8
 		fmt.Print(string(acc))
 	case 2:
 		fmt.Print(fpu.FormatFP(acc))
+	case 22: //Peter Higginson LMC carry over, OUT 22 is output as a character there
+		fmt.Print(string(acc))
 	}
 }
 
