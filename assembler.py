@@ -104,6 +104,15 @@ for line in TO_ASSEMBLE.split("\n"):
         operand = items[1]
         if operand.startswith("/"):
             operand = 0
+        try:
+            print("Operand:",operand)
+            if int(operand) > 32768: # Special case for large constant values ie float constants
+                print(_twos_complement(operand).rjust(32,'0'))
+                OUT_PROGRAM += (_twos_complement(operand).rjust(32,'0')+"\n")
+                print("Too big operand! Assuming DAT")
+        except ValueError:
+            print("ValueErr", operand)
+            pass
     else:
         if len(line) > 2:
             operator = line
@@ -114,7 +123,8 @@ for line in TO_ASSEMBLE.split("\n"):
             break
     operator = INSTRUCTIONS[operator.lower()]
     print(operator, operand)
-    OUT_PROGRAM += (_twos_complement(operator)+_twos_complement(operand)+"\n")
+    if int(operand) < 32768:
+        OUT_PROGRAM += (_twos_complement(operator)+_twos_complement(operand)+"\n")
 OUT_FILE = open("program.txt", "w")
 print(OUT_PROGRAM, file=OUT_FILE, end="")
 OUT_FILE.close()

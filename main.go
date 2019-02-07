@@ -12,12 +12,13 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"./fpu"
 )
 
 const (
-	memAmount = 64   //Memory amount, in 32bit words
+	memAmount = 64    //Memory amount, in 32bit words
 	debug     = false //Print every instruction as it's executed or not
 )
 
@@ -26,21 +27,21 @@ var (
 	acc            int32
 	programcounter int32
 	instructions   = map[int32]func(int32){
-		0:  hlt,
-		1:  add,
-		2:  sub,
-		3:  sta,
-		4:  brz,
-		5:  brp,
-		6:  bra,
-		7:  lda,
-		8:  out,
-		9:  inp,
-		10: asr,
-		11: asl,
-		12: mul,
-		13: cmp,
-		14: set,
+		0:   hlt,
+		1:   add,
+		2:   sub,
+		3:   sta,
+		4:   brz,
+		5:   brp,
+		6:   bra,
+		7:   lda,
+		8:   out,
+		9:   inp,
+		10:  asr,
+		11:  asl,
+		12:  mul,
+		13:  cmp,
+		14:  set,
 		256: fad,
 		257: fsu,
 		258: fmu,
@@ -141,6 +142,7 @@ func power2(y int32) (a int32) {
 }
 
 func main() {
+	elapsedClocks := 0
 	fmt.Printf("----------------------------- Prepared %06v bytes ------------------------------\n", memAmount*4)
 	readProgram() //Read in the program from program.txt, into slice of strings
 	//Load program into memory
@@ -154,6 +156,7 @@ func main() {
 
 	dumpMem(false)
 	fmt.Println("----------------------------------------------------------------------------------")
+	start := time.Now()
 	for programcounter >= 0 {
 		data := fetch()
 		// if debug { //Really, too irritating to leave in. Useful if something goes VERY wrong
@@ -161,9 +164,13 @@ func main() {
 		// }
 		operator, operand := decode(data)
 		execute(operator, operand)
+		elapsedClocks++
 	}
+	finalTime := time.Now().Sub(start)
 	fmt.Println("----------------------------------------------------------------------------------")
 	dumpMem(false)
+	
+	fmt.Println("Cycles Taken:", elapsedClocks, "Time taken:", finalTime, "Effective Frequency:", fmt.Sprintf("%f kHz", float64(elapsedClocks)/finalTime.Seconds()/1000))
 	//fmt.Println(memory)
 }
 
@@ -188,6 +195,7 @@ func decode(data int32) (func(int32), int32) {
 	//fmt.Println(opIndex, " : ", operand)
 	return operator, int32(operand)
 }
+
 //No longer needed as every instruction prints in debug mode anyway
 // func decodeString(data int32) string {
 // 	opIndex, operand := split(data)

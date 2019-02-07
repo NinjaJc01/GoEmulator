@@ -18,13 +18,13 @@ INSTRUCTIONS = {
     13: "cmp",
     14: "set",
     256: "fad",
-	257: "fsu",
-	258: "fmu",
-	259: "fdv",
-	260: "fsq",
+        257: "fsu",
+        258: "fmu",
+        259: "fdv",
+        260: "fsq",
     261: "fsr",
-	262: "fcv",
-	263: "fci"
+        262: "fcv",
+        263: "fci"
 }
 
 
@@ -37,9 +37,13 @@ def twos_comp(val, bits):
 
 for line in PROGRAM:
     PROGRAM_EDITED.append(line.rstrip())
-##print(PROGRAM_EDITED)
+# print(PROGRAM_EDITED)
 
 for line in PROGRAM_EDITED:
     operator = twos_comp(int(line[:16], 2), 16)
     operand = twos_comp(int(line[16:], 2), 16)
-    print(INSTRUCTIONS[operator], operand)
+    try:
+        INSTRUCTIONS[operator]
+        print(INSTRUCTIONS[operator], operand)
+    except KeyError:
+        print("DAT", twos_comp(int(line, 2),32))
