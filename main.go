@@ -107,7 +107,7 @@ func dumpMem(binary bool) {
 		if binary {
 			fmt.Printf(" %#04x %032b ", loc, uint32(memory[loc]))
 		} else {
-			fmt.Printf(" %#06v % 32v ", loc, memory[loc])
+			fmt.Printf(" %#06v % 12v ", loc, memory[loc])
 		}
 		if loc%4 == 3 { //print 2 locs per row
 			fmt.Println()

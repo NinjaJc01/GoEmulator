@@ -68,7 +68,7 @@ for line in PROGRAM:
     line = line.lstrip()
     line = re.sub(" +", " ", line)  # Remove duplicate spaces
     line = line.split(" ")
-    print(len(line), line)
+    # print(len(line), line)
     # Check if first symbol is an instruction
     if line[0].lower() in INSTRUCTIONS:
         DELABELLED += " ".join(line)+"\n"
@@ -89,12 +89,11 @@ TO_ASSEMBLE = ""
 for line in DELABELLED.split("\n"):
     for key, value in SYMBOL_TABLE.items():
         line = re.sub(r"\b"+key+r"\b", str(value), line)
-    print(repr(line))
+    ##print(repr(line))
     if line != '':
         TO_ASSEMBLE += line+"\n"
 
 print("Final:\n", TO_ASSEMBLE, sep="", end='')
-print()
 OUT_PROGRAM = ""
 for line in TO_ASSEMBLE.split("\n"):
     if len(line.split(" ")) > 1:
@@ -105,11 +104,9 @@ for line in TO_ASSEMBLE.split("\n"):
         if operand.startswith("/"):
             operand = 0
         try:
-            print("Operand:",operand)
             if int(operand) > 32768: # Special case for large constant values ie float constants
-                print(_twos_complement(operand).rjust(32,'0'))
                 OUT_PROGRAM += (_twos_complement(operand).rjust(32,'0')+"\n")
-                print("Too big operand! Assuming DAT")
+                # print("Too big operand! Assuming DAT")
         except ValueError:
             print("ValueErr", operand)
             pass
@@ -122,7 +119,7 @@ for line in TO_ASSEMBLE.split("\n"):
         else:
             break
     operator = INSTRUCTIONS[operator.lower()]
-    print(operator, operand)
+    # print(operator, operand)
     if int(operand) < 32768:
         OUT_PROGRAM += (_twos_complement(operator)+_twos_complement(operand)+"\n")
 OUT_FILE = open("program.txt", "w")
