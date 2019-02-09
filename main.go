@@ -132,6 +132,22 @@ func twosComplement(binary string) int16 {
 	return int16(total)
 }
 
+//Ripped from FPU
+func twosComplementNew(binary string) int {
+	if binary[0] == '1' {
+		val, _ := strconv.ParseInt(binary, 2, 64)
+		val -= power2int(len(binary))
+		return int(val)
+	}
+	val, _ := strconv.ParseInt(binary, 2, 64)
+	return int(val)
+}
+func power2int(y int) (a int64) {
+	a = int64(1)
+	a = a << uint64(y)
+	return
+}
+//END ripped from fpu
 func power2(y int32) (a int32) {
 	a = int32(1)
 	// for i := int32(0); i < y; i++ {
@@ -148,7 +164,10 @@ func main() {
 	//Load program into memory
 	for index, value := range program {
 		if value != "" { //Should be \n terminated, therefore last line will be ""
-			memory[index] = (int32(twosComplement(value[0:16])) * 65536) + (int32(twosComplement(value[16:32])))
+		//TODO here's the issue, shouldn't use twos complmement here because that breaks values in a small range
+		//Or more accurately, should use 32bit twos
+			//memory[index] = (int32(twosComplement(value[0:16])) * 65536) + (int32(twosComplement(value[16:32])))
+			memory[index] = int32(twosComplementNew(value))
 		} else {
 			break
 		}
@@ -171,6 +190,7 @@ func main() {
 	dumpMem(false)
 	
 	fmt.Println("Cycles Taken:", elapsedClocks, "Time taken:", finalTime, "Effective Frequency:", fmt.Sprintf("%f kHz", float64(elapsedClocks)/finalTime.Seconds()/1000))
+	fmt.Println(acc)
 	//fmt.Println(memory)
 }
 

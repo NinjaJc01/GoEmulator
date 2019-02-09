@@ -34,13 +34,13 @@ INSTRUCTIONS = {
 }
 
 
-def _twos_complement(number):
+def _twos_complement(number, bits):
     if number == "":
         number = 0
     number = int(number)
     if number < 0:
         number *= -1
-        number = ("{0:<b}".format(number).rjust(16, '0'))
+        number = ("{0:<b}".format(number).rjust(bits, '0'))
         number_2 = ""
         for bit in number:  # Flip the bits
             if int(bit):
@@ -53,7 +53,7 @@ def _twos_complement(number):
         number = ("{0:<b}".format(int_value).rjust(
             16, '0'))  # convert back to binary
         return number
-    return "{0:b}".format(number).rjust(16, '0')
+    return "{0:b}".format(number).rjust(bits, '0')
 
 
 SYMBOL_TABLE = {}
@@ -89,7 +89,7 @@ TO_ASSEMBLE = ""
 for line in DELABELLED.split("\n"):
     for key, value in SYMBOL_TABLE.items():
         line = re.sub(r"\b"+key+r"\b", str(value), line)
-    ##print(repr(line))
+    # print(repr(line))
     if line != '':
         TO_ASSEMBLE += line+"\n"
 
@@ -104,8 +104,11 @@ for line in TO_ASSEMBLE.split("\n"):
         if operand.startswith("/"):
             operand = 0
         try:
-            if int(operand) > 32768: # Special case for large constant values ie float constants
-                OUT_PROGRAM += (_twos_complement(operand).rjust(32,'0')+"\n")
+            # Special case for large constant values ie float constants
+            if int(operand) > 32767 or int(operand) < 0:
+                # print(_twos_complement(operand,32))
+                OUT_PROGRAM += (_twos_complement(operand,
+                                                 32).rjust(32, '0')+"\n")
                 # print("Too big operand! Assuming DAT")
         except ValueError:
             print("ValueErr", operand)
@@ -115,13 +118,15 @@ for line in TO_ASSEMBLE.split("\n"):
             operator = line
             operand = 0
             if operator.lower() == "otc":
-                operand = 1
+                operand = 22
         else:
+            # End of program input
             break
     operator = INSTRUCTIONS[operator.lower()]
     # print(operator, operand)
-    if int(operand) < 32768:
-        OUT_PROGRAM += (_twos_complement(operator)+_twos_complement(operand)+"\n")
+    if int(operand) < 32767 and int(operand) >= 0:
+        OUT_PROGRAM += (_twos_complement(operator, 16) +
+                        _twos_complement(operand, 16)+"\n")
 OUT_FILE = open("program.txt", "w")
 print(OUT_PROGRAM, file=OUT_FILE, end="")
 OUT_FILE.close()
