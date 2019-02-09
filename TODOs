@@ -1,0 +1,1 @@
+Fix issue with numbers that will fit into 32bits, but will set the MSB high, leading eveyrthing to consider them as negative
