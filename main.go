@@ -190,7 +190,6 @@ func main() {
 	dumpMem(false)
 	
 	fmt.Println("Cycles Taken:", elapsedClocks, "Time taken:", finalTime, "Effective Frequency:", fmt.Sprintf("%f kHz", float64(elapsedClocks)/finalTime.Seconds()/1000))
-	fmt.Println(acc)
 	//fmt.Println(memory)
 }
 
