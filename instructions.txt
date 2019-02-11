@@ -1,6 +1,6 @@
 CPU Instructions
 All data is stored as signed 32bit ints, processed as 2's complement when required. Programs are assembled to sequences of binary strings.
-When outputting characters, technically any unicode character can be printed. However, something goes wrong somewhere so the stringGenerator can't handle them
+When outputting characters, technically any unicode character can be printed. However, PowerShell does not correctly support this. BASH works.
 Code		Number	Description																					Syntax
 HLT			0		Exit																						HLT
 DAT			0		Used to mark out data																		DAT <data>
