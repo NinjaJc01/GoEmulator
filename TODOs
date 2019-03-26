@@ -1,1 +1,4 @@
+Pending:
+Different addressing modes for load. Potentially adding an index register, but the only additional mode to be added without adding extra registers would be indirect.
+Completed:
 Fix issue with numbers that will fit into 32bits, but will set the MSB high, leading eveyrthing to consider them as negative
