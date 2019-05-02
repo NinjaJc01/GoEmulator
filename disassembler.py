@@ -17,14 +17,16 @@ INSTRUCTIONS = {
     12: "mul",
     13: "cmp",
     14: "set",
+    15: "inc",
+    16: "ldi",
     256: "fad",
-        257: "fsu",
-        258: "fmu",
-        259: "fdv",
-        260: "fsq",
+    257: "fsu",
+    258: "fmu",
+    259: "fdv",
+    260: "fsq",
     261: "fsr",
-        262: "fcv",
-        263: "fci"
+    262: "fcv",
+    263: "fci"
 }
 
 
@@ -46,4 +48,4 @@ for line in PROGRAM_EDITED:
         INSTRUCTIONS[operator]
         print(INSTRUCTIONS[operator], operand)
     except KeyError:
-        print("DAT", twos_comp(int(line, 2),32))
+        print("DAT", twos_comp(int(line, 2), 32))

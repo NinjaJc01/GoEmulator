@@ -42,6 +42,8 @@ var (
 		12:  mul,
 		13:  cmp,
 		14:  set,
+		15:	 inc,
+		16:  ldi,
 		256: fad,
 		257: fsu,
 		258: fmu,
@@ -361,7 +363,21 @@ func set(value int32) { //14
 	acc = value
 }
 
-func and(index int32) { //
+func inc(value int32) { //15
+	if debug {
+		fmt.Println("INC", value)
+	}
+	acc += value
+}
+
+func ldi(pointer int32) { //16 
+	if debug {
+		fmt.Println("LDI", pointer)
+	}
+	acc = memory[memory[pointer]]
+}
+
+func and(index int32) { //Logical AND
 	if debug {
 		fmt.Println("AND", index)
 	}
@@ -375,7 +391,7 @@ func lor(index int32) { //Logical OR
 	acc = acc | memory[index]
 }
 
-func xor(index int32) {
+func xor(index int32) {//logical XOR
 	if debug {
 		fmt.Println("XOR", index)
 	}

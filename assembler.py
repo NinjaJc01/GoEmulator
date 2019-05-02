@@ -23,6 +23,8 @@ INSTRUCTIONS = {
     "mul": 12,
     "cmp": 13,
     "set": 14,
+    "inc": 15,
+    "ldi": 16,
     "fad": 256,
     "fsu": 257,
     "fmu": 258,

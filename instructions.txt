@@ -13,11 +13,14 @@ BRA			6		Jump no matter what to mem																	JMP <loc>
 LDA			7		Load the acc with the value 																LDA <loc>
 OUT			8		Output the acc value, as a char or a number	(fp or int)										OUT <0 for number, 1 for character, 2 for floating point>
 INP			9		Input, 0 for number, 1 for char. One char at a time, anything beyond 1 is ignored			INP <0 or 1>
+Extensions (Added by me)
 ASR 		10		Arithmatic Shift Right by 1 bit (On the acc)												ASR 0
 ASL 		11		Arithmatic Shift Left by 1 bit (On the acc) (x2)											ASL 0
 MUL			12		Multiply by loc																				MUL <loc>
 CMP			13		CoMPare acc to location, 1 if acc greater, 0 if equal, -1 if acc lower, set acc =result		CMP <loc>
 SET			14		Set acc to operand																			SET <val>
+INC         15      Incremement acc by operand                                                                  INC value
+LDI         16      Load indirect, load into the accumulator the value pointed to by the memory address operand LDI <pointer addr>
 FPU Instructions (32bit, Signed 24bit mantissa, Signed 8 bit exponent but not IEEE754. Internally, these are processed as float64s)
 Float Notes: Mantissa of 0 with an exponent of non zero means special value. Exponent 01111111 is +ive inf, 11111111 is -ive inf, 10000000 is NaN
 FAD         256     Floating Point ADd acc and loc                                                              FAD <loc>
